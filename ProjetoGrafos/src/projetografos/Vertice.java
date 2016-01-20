@@ -8,26 +8,34 @@ package projetografos;
  */
 public class Vertice {
 
-    private int pE, pS;
+    private int m_pPE, m_pPS, m_pIndice;
     
     
     public Vertice(){
-        pE = pS = 0;
+        m_pPE = m_pPS = 0;
     }
     
     public int getPE(){
-        return this.pE;
+        return this.m_pPE;
     }
     
     public int getPS(){
-        return this.pS;
+        return this.m_pPS;
+    }
+    
+    public int getIndice(){
+        return this.m_pIndice;
     }
     
     public void setPE(int _pE){
-        this.pE = _pE;
+        this.m_pPE = _pE;
     }
     
     public void setPS(int _pS){
-        this.pS = _pS;
+        this.m_pPS = _pS;
+    }
+    
+    public void setIndice(int _pIndice){
+        this.m_pIndice = _pIndice;
     }
 }
