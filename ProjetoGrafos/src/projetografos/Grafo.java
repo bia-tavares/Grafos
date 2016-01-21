@@ -53,6 +53,9 @@ public class Grafo {
        
     }
     
+    /**
+     * Método que imprime as listas de vértices e arestas
+     */
     public void imprime(){
         for (int i = 0; i < m_pVertices.size(); i++) {
             
