@@ -53,6 +53,12 @@ public class Main {
             
             if(manipulador.ehCiclico()) System.out.println("\n\n O GRAFO É CÍCLICO!!");
             else System.out.println("\n\n O GRAFO NÃO É CÍCLICO!!");
+            
+            if(manipulador.ehBipartido()) System.out.println("\n\n O GRAFO É BIPARTIDO!!");
+            else System.out.println("\n\n O GRAFO NÃO É BIPARTIDO!!");
+            
+            if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n\n É UMA ÁRVORE!!");
+            else System.out.println("\n\n NÃO É UMA ÁRVORE!!");
         }
         
     }

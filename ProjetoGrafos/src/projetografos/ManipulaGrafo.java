@@ -8,8 +8,9 @@ import javafx.util.Pair;
  * @param grafo - Grafo a ser manipulado
  * @param tempo - tempo global de busca
  * @param compConexos - quantidade de componentes conexos
- * @param ehConexo - boolean que indica se o grafo é desconexo
- * @param ehBipartido - boolean que indica se o grafo é bipartido
+ * @param conexo - boolean que indica se o grafo é desconexo
+ * @param ciclico - boolean que indica se o grafo é ciclico
+ * @param bipartido - boolean que indica se o grafo é bipartido
  * 
  * 
  * @author Beatriz Tavares e Raissa Amaral
@@ -154,6 +155,7 @@ public class ManipulaGrafo {
                     */
                     if ( (vy.getPS() == 0) && (raiz.getPai() != vy.getIndice()) ){
                         if (!ciclico) ciclico = true;
+                        if ((vy.getCor() == raiz.getCor()) && (!bipartido)) bipartido = true;
                         System.out.println("Inserindo aresta de retorno (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((vy.getIndice()+1))+")");
                     }
                     
@@ -198,9 +200,16 @@ public class ManipulaGrafo {
     
     
     /**
-     * @return se é acíclico ou não;
+     * @return se é cíclico ou não;
      */
     public boolean ehCiclico(){
         return ciclico;
+    }
+    
+    /**
+     * @return se é bipartido ou não;
+     */
+    public boolean ehBipartido(){
+        return bipartido;
     }
 }
