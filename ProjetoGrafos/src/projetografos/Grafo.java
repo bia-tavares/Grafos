@@ -9,17 +9,18 @@ import javafx.util.Pair;
 /**
  * 
  * Classe que mantém os dados do grafo. 
- * Um grafo deve conhecer seus vértices e arestas.
- *
+ * Um grafo deve conhecer seus vértices, arestas, 
+ * o número de vértices existentes e 
+ * a probabilidade de uma aresta existir
  * 
  * @author Beatriz Tavares e Raissa Amaral
  */
 public class Grafo{
     
-    private ArrayList<Vertice> m_pVertices = new ArrayList<Vertice>();
-    private ArrayList<Pair<Integer, Integer>> m_pArestas = new ArrayList<Pair<Integer, Integer>>();
-    private int m_pNVertices;
-    private double m_pProb;
+    private ArrayList<Vertice> vertices = new ArrayList<Vertice>();
+    private ArrayList<Pair<Integer, Integer>> arestas = new ArrayList<Pair<Integer, Integer>>();
+    private int nVertices;
+    private double probabilidade;
     
     /**
      * Construtor da classe.
@@ -29,8 +30,8 @@ public class Grafo{
      */
     public Grafo( double _prob, int _nVertices ){
         
-        this.m_pProb = _prob;
-        this.m_pNVertices = _nVertices;        
+        this.probabilidade = _prob;
+        this.nVertices = _nVertices;        
        
         constroiGrafo();
     }
@@ -40,21 +41,21 @@ public class Grafo{
      */
     private void constroiGrafo(){
         
-        for (int i = 0; i < m_pNVertices; i++) {
+        for (int i = 0; i < nVertices; i++) {
            Vertice v = new Vertice();
            v.setIndice(i);
-           m_pVertices.add(v);
+           vertices.add(v);
         }
         
-        for ( int i = 0; i < ( m_pVertices.size() - 1 ); i++ ) {
+        for ( int i = 0; i < ( vertices.size() - 1 ); i++ ) {
             
-            for ( int j = i; j < m_pVertices.size(); j++ ) {
+            for ( int j = i; j < vertices.size(); j++ ) {
                 
                 double chance = Math.random()*100;
                 
-                if (chance <= m_pProb){
+                if (chance <= probabilidade){
                     Pair<Integer, Integer> aresta = new Pair( i, j);
-                    m_pArestas.add(aresta);
+                    arestas.add(aresta);
                 }
                 
             }
@@ -64,19 +65,19 @@ public class Grafo{
     }
     
     public ArrayList<Vertice> getVertices(){
-        return m_pVertices;
+        return vertices;
     }
     
     public ArrayList<Pair<Integer, Integer>> getArestas(){
-        return m_pArestas;
+        return arestas;
     }
     
     public int getNumeroVertices(){
-        return m_pNVertices;
+        return nVertices;
     }
     
     public double getProbabilidade(){
-        return m_pProb;
+        return probabilidade;
     }
     
     

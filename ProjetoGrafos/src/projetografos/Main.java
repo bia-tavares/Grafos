@@ -44,10 +44,15 @@ public class Main {
             manipulador.imprimeGrafo();
             System.out.println("\n\n\n");
             
-            manipulador.buscaProfundidade();
+            manipulador.busca();
             
-            if(manipulador.ehDesconexo()) System.out.println("\n\n O GRAFO É DESCONEXO!!");
-            else System.out.println("\n\n O GRAFO NÃO É DESCONEXO!!");
+            if(manipulador.ehConexo()) System.out.println("\n\n O GRAFO É CONEXO!!");
+            else System.out.println("\n\n O GRAFO NÃO É CONEXO!!");
+            
+            System.out.println("\n\n O NÚMERO DE COMPONENTES CONEXAS DO GRAFO É: " + String.valueOf(manipulador.numeroCompConexos()));
+            
+            if(manipulador.ehCiclico()) System.out.println("\n\n O GRAFO É CÍCLICO!!");
+            else System.out.println("\n\n O GRAFO NÃO É CÍCLICO!!");
         }
         
     }
