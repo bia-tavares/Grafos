@@ -10,7 +10,7 @@ package projetografos;
  */
 public class Vertice {
 
-    private int pE, pS, indice, pai, cor=0;
+    private int pE, pS, indice, pai, cor=0, back;
     
     
     public Vertice(){
@@ -34,6 +34,15 @@ public class Vertice {
         return this.pai;
     }
     
+    public int getCor(){
+        return cor;
+    }
+    
+    public int getBack()
+    {
+        return back;
+    }
+    
     public void setPE(int _pE){
         this.pE = _pE;
     }
@@ -54,7 +63,7 @@ public class Vertice {
         this.cor = _cor;
     }
     
-    public int getCor(){
-        return cor;
+    public void setBack(int _back){
+        this.back = _back;
     }
 }

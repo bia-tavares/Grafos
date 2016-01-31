@@ -53,7 +53,8 @@ public class Grafo{
                 
                 double chance = Math.random()*100;
                 
-                if (chance <= probabilidade){
+                /* Testando se i é diferente de j para não ter aresta de v para v (v,v)*/
+                if ((chance <= probabilidade) && (i!=j)){
                     Pair<Integer, Integer> aresta = new Pair( i, j);
                     arestas.add(aresta);
                 }
