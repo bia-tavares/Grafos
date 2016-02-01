@@ -24,7 +24,8 @@ public class ManipulaGrafo {
     private int tempo, compConexos;
     private boolean conexo = true, ciclico = false, bipartido = false;
     private List<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
-    
+    private Bloco _bloco = new Bloco(0);
+    private int indice_bloco = 0;
     
     /**
      * Construtor da classe.
@@ -68,6 +69,51 @@ public class ManipulaGrafo {
         }
     }
     
+    /**
+     * Método que imprime as listas de vértices e arestas
+     */
+    public void imprimeTabelaGrafo(){
+        for (int i = 0; i < grafo.getVertices().size(); i++) {
+            if(i == 0) System.out.print("\n\nVert : ");
+            System.out.print(" v"+String.valueOf(i+1));
+        }
+        for (int i = 0; i < grafo.getVertices().size(); i++) {
+            if(i == 0) System.out.print("\n  PE : ");
+            Vertice v = grafo.getVertices().get(i);
+            System.out.print("  "+(v.getPE()));
+        }
+        for (int i = 0; i < grafo.getVertices().size(); i++) {
+            if(i == 0) System.out.print("\n  PS : ");
+            Vertice v = grafo.getVertices().get(i);
+            System.out.print("  "+(v.getPS()));
+        }
+        for (int i = 0; i < grafo.getVertices().size(); i++) {
+            if(i == 0) System.out.print("\nBack : ");
+            Vertice v = grafo.getVertices().get(i);
+            System.out.print("  "+(v.getBack()));
+        }
+        System.out.println("\n");
+    }
+    
+    
+    public void imprimeBloco() {
+        for (int j = 0; j < grafo.getBlocos().size(); j++) {
+            System.out.println("ENTROOOU");
+            for (int i = 0; i < grafo.getBlocos().get(j).getArestas().size(); i++) {
+
+                if(i == 0) System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
+
+                Pair<Integer, Integer> aresta = grafo.getBlocos().get(j).getArestas().get(i);
+                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
+
+                if( ( i >= 0 ) && ( i < ( grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
+                    System.out.print(", ");
+                }
+
+                if(i == grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
+            }
+        }
+    }
     
     /**
      * Método que gerencia a busca em profundidade.
@@ -154,8 +200,24 @@ public class ManipulaGrafo {
                     tempo++;
                     System.out.println("\n t = "+String.valueOf(tempo)+" : ");
                     System.out.println("Inserindo aresta de profundidade (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
+                    /* Colocando arestas na lista de blocos */
+                    Pair<Integer,Integer> copy_aresta = new Pair(a, b);
+                    _bloco.addAresta(copy_aresta);
                     buscaProfundidade(w.getIndice());
-                    
+                   
+                    if (w.getBack() >= v.getPE()) {
+                        Bloco bl = new Bloco(indice_bloco++);
+                        
+                        while(_bloco.ultimaAresta().equals(copy_aresta) == false){
+                            if(_bloco != null) {
+                                Pair<Integer, Integer> aa = _bloco.removeAresta(); 
+                                bl.addAresta(aa);
+                            }
+                        };
+
+                        bl.addAresta(_bloco.removeAresta());
+                        grafo.addBloco(bl, indice_bloco);
+                    }
                     v.setBack(Math.min(v.getBack(), w.getBack()));
                 }
                 /* Se o vértice w não tiver PE == 0, significa que já foi visitado.*/
@@ -170,6 +232,9 @@ public class ManipulaGrafo {
                         if ((w.getCor() == v.getCor()) && (!bipartido)) bipartido = true;
                         System.out.println("Inserindo aresta de retorno (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
                         
+                        Pair<Integer,Integer> copy_aresta = new Pair(a, b);
+                        _bloco.addAresta(copy_aresta);
+                    
                         v.setBack(Math.min(v.getBack(), w.getPE()));
                     }
                     
@@ -197,6 +262,7 @@ public class ManipulaGrafo {
      * Método que imprime as pontes, articulações e blocos do grafo.
      */
     public void buscaPontesArticBlocos(){
+        
       
         
     }

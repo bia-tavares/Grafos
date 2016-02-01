@@ -21,7 +21,7 @@ public class Grafo{
     private ArrayList<Pair<Integer, Integer>> arestas = new ArrayList<Pair<Integer, Integer>>();
     private int nVertices;
     private double probabilidade;
-    
+    public ArrayList<Bloco> blocos = new ArrayList<Bloco>();
     /**
      * Construtor da classe.
      * 
@@ -62,7 +62,8 @@ public class Grafo{
             }
             
         }
-
+        Bloco b = new Bloco(0);
+        blocos.add(0,b); 
     }
     
     public ArrayList<Vertice> getVertices(){
@@ -81,7 +82,15 @@ public class Grafo{
         return probabilidade;
     }
     
+    public ArrayList<Bloco> getBlocos(){
+        return blocos;
+    }
     
+    public Bloco addBloco(Bloco _b, int i) {
+        _b.setID(i);
+        blocos.add(_b);
+        return _b;
+    }
     
     
 }

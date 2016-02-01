@@ -60,6 +60,10 @@ public class Main {
             if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n\n É UMA ÁRVORE!!");
             else System.out.println("\n\n NÃO É UMA ÁRVORE!!");
             
+            manipulador.imprimeTabelaGrafo();
+            manipulador.imprimeBloco();
+
+            
             // Depois de montar o grafo, buscar as pontes, articulações e blocos.
             //manipulador.buscaPontesArticBlocos();
         
