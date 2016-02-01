@@ -96,25 +96,6 @@ public class ManipulaGrafo {
     }
     
     
-    public void imprimeBloco() {
-        for (int j = 0; j < grafo.getBlocos().size(); j++) {
-            System.out.println("ENTROOOU");
-            for (int i = 0; i < grafo.getBlocos().get(j).getArestas().size(); i++) {
-
-                if(i == 0) System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
-
-                Pair<Integer, Integer> aresta = grafo.getBlocos().get(j).getArestas().get(i);
-                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
-
-                if( ( i >= 0 ) && ( i < ( grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
-                    System.out.print(", ");
-                }
-
-                if(i == grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
-            }
-        }
-    }
-    
     /**
      * Método que gerencia a busca em profundidade.
      * Esse método inicia o tempo global, 
@@ -124,7 +105,7 @@ public class ManipulaGrafo {
      */
     public void busca(){
         
-        tempo = 1;
+        tempo = 0;
         
         //número de buscas realizadas
         compConexos = 0;
@@ -155,6 +136,7 @@ public class ManipulaGrafo {
     private void buscaProfundidade(int _indiceRaiz){
                
         Vertice v = grafo.getVertices().get(_indiceRaiz);
+        tempo++;
         v.setPE(tempo);
         v.setBack(v.getPE());
         
@@ -197,17 +179,22 @@ public class ManipulaGrafo {
                     w.setPai(_indiceRaiz);
                     w.setCor(1 - v.getCor() );
                     
-                    tempo++;
+                    //COMENTEI ESSA PARTE DO TEMPO, POIS ELE NÃO É ACRESCIDO AQUI
+                    //Quando a aresta é criada, o tempo deve ser adicionado no inico do procedimento
+                    //tempo++;
                     System.out.println("\n t = "+String.valueOf(tempo)+" : ");
                     System.out.println("Inserindo aresta de profundidade (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
-                    /* Colocando arestas na lista de blocos */
+                    /* Guardando arestas numa lista generica representando um bloco,
+                    * a medida que o algoritmo rodar, os blocos vao sendo definidos, 
+                    * e as arestas removidas desta lista inicial */
                     Pair<Integer,Integer> copy_aresta = new Pair(a, b);
                     _bloco.addAresta(copy_aresta);
+                    
                     buscaProfundidade(w.getIndice());
-                   
+                    /*O back ser maior ou igual à PE representa que o grafo deixou de seguir neste bloco e iniciou outro*/
                     if (w.getBack() >= v.getPE()) {
                         Bloco bl = new Bloco(indice_bloco++);
-                        
+                        /*Entao varremos na lista todas as ultimas arestas inseridas, até chegar na que atendedeu à condiçao acima*/
                         while(_bloco.ultimaAresta().equals(copy_aresta) == false){
                             if(_bloco != null) {
                                 Pair<Integer, Integer> aa = _bloco.removeAresta(); 
@@ -263,8 +250,28 @@ public class ManipulaGrafo {
      */
     public void buscaPontesArticBlocos(){
         
-      
-        
+        for (int j = 0; j < grafo.getBlocos().size(); j++) {
+            for (int i = 0; i < grafo.getBlocos().get(j).getArestas().size(); i++) {
+                if(i == 0) {
+                    //Se o bloco tiver apenas uma aresta, ele pode ser considerado uma ponte
+                    if(grafo.getBlocos().get(j).getArestas().size() == 1){
+                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
+                    }
+                    else {
+                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
+                    }
+                }
+                     
+                Pair<Integer, Integer> aresta = grafo.getBlocos().get(j).getArestas().get(i);
+                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
+
+                if( ( i >= 0 ) && ( i < ( grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
+                    System.out.print(", ");
+                }
+
+                if(i == grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
+            }
+        }
     }
     
     /**

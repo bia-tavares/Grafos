@@ -61,7 +61,7 @@ public class Main {
             else System.out.println("\n\n NÃO É UMA ÁRVORE!!");
             
             manipulador.imprimeTabelaGrafo();
-            manipulador.imprimeBloco();
+            manipulador.buscaPontesArticBlocos();
 
             
             // Depois de montar o grafo, buscar as pontes, articulações e blocos.
