@@ -21,7 +21,9 @@ public class Grafo{
     private ArrayList<Pair<Integer, Integer>> arestas = new ArrayList<Pair<Integer, Integer>>();
     private int nVertices;
     private double probabilidade;
-    public ArrayList<Bloco> blocos = new ArrayList<Bloco>();
+    private ArrayList<Bloco> blocos = new ArrayList<Bloco>();
+    private ArrayList<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
+
     /**
      * Construtor da classe.
      * 
@@ -31,8 +33,7 @@ public class Grafo{
     public Grafo( double _prob, int _nVertices ){
         
         this.probabilidade = _prob;
-        this.nVertices = _nVertices;        
-       
+        this.nVertices = _nVertices;    
         constroiGrafo();
     }
     
@@ -49,18 +50,19 @@ public class Grafo{
         
         for ( int i = 0; i < ( vertices.size() - 1 ); i++ ) {
             
-            for ( int j = i; j < vertices.size(); j++ ) {
+            for ( int j = i+1; j < vertices.size(); j++ ) {
                 
                 double chance = Math.random()*100;
                 
                 /* Testando se i é diferente de j para não ter aresta de v para v (v,v)*/
-                if ((chance <= probabilidade) && (i!=j)){
+                if ((chance <= probabilidade)){
                     Pair<Integer, Integer> aresta = new Pair( i, j);
                     arestas.add(aresta);
+                    vertices.get(i).addGrau();
+                    vertices.get(j).addGrau();
                 }
                 
             }
-            
         }
         Bloco b = new Bloco(0);
         blocos.add(0,b); 
@@ -92,5 +94,12 @@ public class Grafo{
         return _b;
     }
     
+    public void addPonte(Pair<Integer, Integer> _aresta) {
+        this.pontes.add(_aresta);
+    }
+    
+    public ArrayList<Pair<Integer, Integer>> getPontes(){
+        return pontes;
+    }
     
 }

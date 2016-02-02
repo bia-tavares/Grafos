@@ -34,7 +34,7 @@ public class Bloco {
     }
     
     public void addAresta(Pair<Integer, Integer> _aresta) {
-        arestas.add(_aresta);
+        this.arestas.add(_aresta);
     }
     
     public Pair<Integer, Integer> ultimaAresta() {
@@ -42,6 +42,6 @@ public class Bloco {
     }
     
     public  Pair<Integer, Integer> removeAresta() {
-        return arestas.remove(arestas.size()-1);
+        return this.arestas.remove(arestas.size()-1);
     }
 }

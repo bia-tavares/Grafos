@@ -60,9 +60,15 @@ public class Main {
             if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n\n É UMA ÁRVORE!!");
             else System.out.println("\n\n NÃO É UMA ÁRVORE!!");
             
+            if(manipulador.ehEuleriano()) System.out.println("\n\n O GRAFO É UM CIRCUITO EULERIANO");
+            else System.out.println("\n\n NÃO É UM CIRCUITO EULERIANO");
+            
+            System.out.println("\n\n");
+            manipulador.imprimeGrafo();
             manipulador.imprimeTabelaGrafo();
             manipulador.buscaPontesArticBlocos();
-
+            
+            if(manipulador.ehEuleriano()) manipulador.montaGrafoEuleriano();
             
             // Depois de montar o grafo, buscar as pontes, articulações e blocos.
             //manipulador.buscaPontesArticBlocos();
