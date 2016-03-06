@@ -49,19 +49,19 @@ public class Main {
             if(manipulador.ehConexo()) System.out.println("\n\n O GRAFO É CONEXO!!");
             else System.out.println("\n\n O GRAFO NÃO É CONEXO!!");
             
-            System.out.println("\n\n O NÚMERO DE COMPONENTES CONEXAS DO GRAFO É: " + String.valueOf(manipulador.numeroCompConexos()));
+            System.out.println(" O NÚMERO DE COMPONENTES CONEXAS DO GRAFO É: " + String.valueOf(manipulador.numeroCompConexos()));
             
-            if(manipulador.ehCiclico()) System.out.println("\n\n O GRAFO É CÍCLICO!!");
-            else System.out.println("\n\n O GRAFO NÃO É CÍCLICO!!");
+            if(manipulador.ehCiclico()) System.out.println("\n O GRAFO É CÍCLICO!!");
+            else System.out.println("\n O GRAFO NÃO É CÍCLICO!!");
             
-            if(manipulador.ehBipartido()) System.out.println("\n\n O GRAFO É BIPARTIDO!!");
-            else System.out.println("\n\n O GRAFO NÃO É BIPARTIDO!!");
+            if(manipulador.ehBipartido()) System.out.println("\n O GRAFO É BIPARTIDO!!");
+            else System.out.println("\n O GRAFO NÃO É BIPARTIDO!!");
             
-            if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n\n É UMA ÁRVORE!!");
-            else System.out.println("\n\n NÃO É UMA ÁRVORE!!");
+            if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n É UMA ÁRVORE!!");
+            else System.out.println("\n NÃO É UMA ÁRVORE!!");
             
-            if(manipulador.ehEuleriano()) System.out.println("\n\n O GRAFO É UM CIRCUITO EULERIANO");
-            else System.out.println("\n\n NÃO É UM CIRCUITO EULERIANO");
+            if(manipulador.ehEuleriano()) System.out.println("\n O GRAFO É UM CIRCUITO EULERIANO");
+            else System.out.println("\n NÃO É UM CIRCUITO EULERIANO");
             
             System.out.println("\n\n");
             manipulador.imprimeGrafo();

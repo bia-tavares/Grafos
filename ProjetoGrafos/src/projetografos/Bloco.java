@@ -10,7 +10,7 @@ import javafx.util.Pair;
 
 /**
  *
- * @author rpamaral
+ * @author Beatriz Tavares e Raissa Amaral
  */
 public class Bloco {
     
@@ -45,3 +45,4 @@ public class Bloco {
         return this.arestas.remove(arestas.size()-1);
     }
 }
+

@@ -3,7 +3,6 @@ package projetografos;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
-import jdk.nashorn.internal.objects.NativeArray;
 
 /**
  * Classe para manipulação de grafo.
@@ -22,7 +21,7 @@ public class ManipulaGrafo {
     
     private Grafo grafo;
     private int tempo, compConexos;
-    private boolean conexo = true, ciclico = false, bipartido = false, euleriano = false;
+    private boolean conexo = true, ciclico = false, bipartido = true, euleriano = false;
     private List<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
     private Bloco _bloco = new Bloco(0);
     private int indice_bloco = 0;
@@ -104,19 +103,23 @@ public class ManipulaGrafo {
     /**
      * Método que gerencia a busca em profundidade.
      * Esse método inicia o tempo global, 
- inicia a busca em profundidade com v no vértice v0,
- testa se todos os vértices foram visitados e
- faz novas buscas, caso seja necessário.
+        inicia a busca em profundidade com raiz em um vértice aleatório,
+        testa se todos os vértices foram visitados e
+        faz novas buscas, caso seja necessário.
      */
     public void busca(){
         
         tempo = 0;
         
-        //número de buscas realizadas
+        // Guarda se a aresta já foi visitada
+        boolean[] arestaVisitada = new boolean[grafo.getArestas().size()];
+        
+        /* compConexos é o número de grafos desconexos encontrados.
+           A raíz é escolhida aleatoriamente na primeira busca, baseado no numero de vertices.
+        */
         compConexos = 1;
-        // A raíz é escolhida aleatoriamente, baseado no numero de vertices
         int raiz = (int)(Math.random()*grafo.getNumeroVertices());
-        buscaProfundidade(raiz);
+        buscaProfundidade(raiz, arestaVisitada);
 
         /* Se o grafo for desconexo, ao sair da primeira busca existirão vértices não explorados. 
             Então devemos percorrer a lista de vértices em busca de um vértice não explorado,
@@ -129,7 +132,7 @@ public class ManipulaGrafo {
                 if((compConexos > 1 ) && (conexo == true)) 
                     conexo = false;
                 System.out.println("\n\n BUSCA EM PROFUNDIDADE "+String.valueOf(compConexos)+":");
-                buscaProfundidade(i);
+                buscaProfundidade(i, arestaVisitada);
             }
         }
         
@@ -140,14 +143,16 @@ public class ManipulaGrafo {
      * Realiza recursivamente a busca em profundidade a partir de um índice.
      * 
      * @param _indiceRaiz - valor de índice da v da recursão.
+     * @param _arestaVisitada - Lista booleana que indica se determinada aresta já foi visitada.
+     * 
      */
-    private void buscaProfundidade(int _indiceRaiz){
+    private void buscaProfundidade(int _indiceRaiz, boolean[] _arestaVisitada){
                
         Vertice v = grafo.getVertices().get(_indiceRaiz);
+        /* Para cada novo vértice inserido, incrementa o tempo */
         tempo++;
         v.setPE(tempo);
         v.setBack(v.getPE());
-        boolean[] arestaVisitada = new boolean[grafo.getArestas().size()];
         
         /* Imprime dados do vértice a ser explorado */
         String str = "Explorando v"+String.valueOf(_indiceRaiz+1)+"."+
@@ -158,36 +163,40 @@ public class ManipulaGrafo {
         else str+=String.valueOf((v.getPai()+1));
         System.out.println(str);
         
-        /* Testaremos para cada aresta do grafo se é uma aresta que pertence ao vértice que está sendo explorado. */
-        for (int i = 0; i < grafo.getArestas().size(); i++) {
+        /* 
+           Testaremos para cada aresta do grafo se não foi visitada e 
+           se é uma aresta que pertence ao vértice que está sendo explorado. 
+        */
+        for (int indiceAresta = 0; indiceAresta < grafo.getArestas().size(); indiceAresta++) {
             
-            if(!arestaVisitada[i]){
-                int indiceAresta = i;
+            if(!_arestaVisitada[indiceAresta]){
+                
                 /* A aresta relaciona a com b da seguinte maneira: (a, b) */
-                Pair<Integer,Integer> aresta = grafo.getArestas().get(i);
+                Pair<Integer,Integer> aresta = grafo.getArestas().get(indiceAresta);
                 int a = aresta.getKey();
                 int b = aresta.getValue();
                 Vertice w = new Vertice();
 
-                /* Se o índice de a é o mesmo de v (vértice que está sendo explorado no momento), 
-                    então a é a v e a aresta é (v, b)
-                    Testaremos se a aresta é de profundidade, de retorno, ou de avanço.
+                /* 
+                   Se o índice de a é o mesmo de v (vértice que está sendo explorado no momento), 
+                   então a==v e a aresta é (v, b). 
+                   Se o índice de b é o mesmo de v, então b==v e a aresta é (a, v).
+                   Testaremos se a aresta é de profundidade, de retorno, ou de avanço.
                 */
                 if ((a == v.getIndice()) || (b == v.getIndice())){
 
-                    /* Colocando em w o vértice a qual v está conectado através da aresta analisada*/
+                    /* Colocando em w o vértice a qual v está conectado através da aresta analisada: (v,w) ou (w,v)*/
                     if(a == v.getIndice()) w = grafo.getVertices().get(b);
                     if(b == v.getIndice()) w = grafo.getVertices().get(a);
                     
 
                     /* Se o vértice w tiver PE == 0, significa que ainda não foi visitado.
                         Logo a aresta é de profundidade e iremos explorar w.
-                        Seu pai será a v e visitaremos w no tempo tempo++.
-
+                        Seu pai será a v e visitaremos w.
                         A cor do vértice w é 1 por default. Iremos substituir por 1-cor(pai).
                     */
                     if (w.getPE() == 0){
-                        arestaVisitada[indiceAresta] = true;
+                        _arestaVisitada[indiceAresta] = true;
                         w.setPai(_indiceRaiz);
                         w.setCor(1 - v.getCor() );
 
@@ -199,7 +208,7 @@ public class ManipulaGrafo {
                         Pair<Integer,Integer> copy_aresta = new Pair(a, b);
                         _bloco.addAresta(copy_aresta);
 
-                        buscaProfundidade(w.getIndice());
+                        buscaProfundidade(w.getIndice(), _arestaVisitada);
                         /*O back ser maior ou igual à PE representa que o grafo deixou de seguir neste bloco e iniciou outro*/
                         if (w.getBack() >= v.getPE()) {
                             Bloco bl = new Bloco(indice_bloco++);
@@ -219,31 +228,42 @@ public class ManipulaGrafo {
                     /* Se o vértice w não tiver PE == 0, significa que já foi visitado.*/
                     else{
 
-                        /* Se w já foi visitado mas tem PS==0, significa que ainda não foi totalmente explorado.
-                            Se w não é pai da v, então a aresta é de retorno e iremos avisar.
-                            Se existe aresta de retorno, o grafo não é acíclico.
+                        /* 
+                           Se w já foi visitado mas tem PS==0, significa que ainda não foi totalmente explorado.
+                           Então a aresta é de retorno e iremos avisar.
+                           Se existe aresta de retorno, o grafo não é acíclico.
                         */
                         
-                        if ( (w.getPS() == 0) && (v.getPai() != w.getIndice()) ){
+                        if (w.getPS() == 0){
+                            
                             if (!ciclico) ciclico = true;
-                            if ((w.getCor() == v.getCor()) && (!bipartido)) bipartido = true;
+                            /* Se os 2 vértices ligados por uma aresta de retorno tiverem a mesma cor, o grafo não é bipartido */
+                            if ((w.getCor() == v.getCor()) && (bipartido)) bipartido = false;
+                            
                             System.out.println("Inserindo aresta de retorno (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
-                            arestaVisitada[indiceAresta] = true;
+                            _arestaVisitada[indiceAresta] = true;
                             Pair<Integer,Integer> copy_aresta = new Pair(a, b);
                             _bloco.addAresta(copy_aresta);
 
                             v.setBack(Math.min(v.getBack(), w.getPE()));
                         }
 
-                        /* Se w já foi visitado (PE!=0) e tem PS!=0, significa que já foi totalmente explorado.
-                            Se w não é pai da v, então a aresta é de avanço e iremos avisar.
+                        
+                        /*
+                           Grafos não direcionados não possuem arestas de avanço ou cruzamento.
+                           Os filhos são totalmente explorados antes de voltar para o pai.
                         */
+                        /*
                         if( (w.getPS() != 0) && (v.getPai() != w.getIndice()) ){
-                                            
+                            
+                            // Se os 2 vértices ligados por uma aresta de retorno tiverem a mesma cor, o grafo não é bipartido 
+                            if ((w.getCor() == v.getCor()) && (bipartido)) bipartido = false;
+                            
                             if(w.getPS() < v.getPE()) System.out.println("Inserindo aresta de cruzamento (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
                             else System.out.println("Inserindo aresta de avanço (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
-                            arestaVisitada[indiceAresta] = true;
+                            _arestaVisitada[indiceAresta] = true;
                         }
+                        */
                     }
 
                 }
@@ -251,8 +271,9 @@ public class ManipulaGrafo {
         }
         
         tempo++;
-        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
         v.setPS(tempo);
+        
+        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
         System.out.println("PS(v"+String.valueOf(_indiceRaiz+1)+"): "+String.valueOf(v.getPS()) );
     }
     
@@ -292,6 +313,8 @@ public class ManipulaGrafo {
      * Circuitos euleriando são aqueles que percorrem TODAS as arestas dro grafo, sem repeti-las
      * 
      * E o vértice inicial coinicide com o o final
+     * 
+     * @return se grafo é ou não euleriano.
      */
     public boolean ehEuleriano(){
         // Grafos eulerianos, precisam necessariamente ser conexos
@@ -309,6 +332,9 @@ public class ManipulaGrafo {
     
     
 
+    /**
+     *  Monta um circuito euleriano partindo de um vértice aleatório.
+     */
     public void montaGrafoEuleriano(){
         
         ArrayList<Vertice> visitados = new ArrayList<Vertice>();
