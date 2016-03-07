@@ -33,7 +33,8 @@ public class Main {
         scan.close();
         
         if ((nVertices != 0)&&(prob != 0)) 
-            grafo = new Grafo(prob, nVertices);
+            grafo = new Grafo();
+            grafo.constroiGrafo(prob, nVertices);
         
         if(grafo != null) 
             manipulador = new ManipulaGrafo(grafo);
@@ -68,7 +69,10 @@ public class Main {
             manipulador.imprimeTabelaGrafo();
             manipulador.buscaPontesArticBlocos();
             
-            if(manipulador.ehEuleriano()) manipulador.montaGrafoEuleriano();
+            if(manipulador.ehEuleriano()){
+                manipulador.montaGrafoEuleriano();
+                manipulador.Fleury();
+            }
             
             // Depois de montar o grafo, buscar as pontes, articulações e blocos.
             //manipulador.buscaPontesArticBlocos();

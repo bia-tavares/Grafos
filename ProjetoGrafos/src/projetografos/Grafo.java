@@ -30,17 +30,13 @@ public class Grafo{
      * @param _prob - probabilidade de cada possível aresta ser inserida.
      * @param _nVertices - número de vértices do grafo.
      */
-    public Grafo( double _prob, int _nVertices ){
-        
-        this.probabilidade = _prob;
-        this.nVertices = _nVertices;    
-        constroiGrafo();
+    public Grafo(){
     }
     
     /**
      * Constrói grafo com parâmetros passados.
      */
-    private void constroiGrafo(){
+    public void constroiGrafo(double probabilidade, int nVertices ){
         
         for (int i = 0; i < nVertices; i++) {
            Vertice v = new Vertice();
@@ -101,5 +97,6 @@ public class Grafo{
     public ArrayList<Pair<Integer, Integer>> getPontes(){
         return pontes;
     }
+
     
 }

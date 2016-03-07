@@ -307,6 +307,118 @@ public class ManipulaGrafo {
         }
     }
     
+    public Pair<Integer, Integer> busca_aresta(Vertice v, ArrayList<Pair<Integer, Integer>> _arestas) {
+        for (int i = 0; i < _arestas.size(); i++) {
+            if(_arestas.get(i).getKey() == v.getIndice() || _arestas.get(i).getValue() == v.getIndice()){
+                return _arestas.get(i);
+            }
+        }
+        return null;
+    }
+    public boolean ePonte(Grafo g, Pair<Integer, Integer> aresta){
+        for (int i = 0; i < g.getBlocos().size(); i++) {
+            if(g.getBlocos().get(i).getArestas().size() == 1  && g.getBlocos().get(i).getArestas().get(0) == aresta){
+                return true;
+            }
+        }
+        return false;
+    }
+     public Pair<Integer, Integer> busca_aresta_nao_ponte(Grafo g, Vertice v, ArrayList<Pair<Integer, Integer>> _arestas) {
+        for (int i = 0; i < _arestas.size(); i++) {
+            if((_arestas.get(i).getKey()) == v.getIndice() || _arestas.get(i).getValue() == v.getIndice()){
+                if(ePonte(g, _arestas.get(i)) == false){
+                    return _arestas.get(i);
+                }
+            }
+        }
+        return null;
+    }
+         
+    public void removeAresta (Grafo g, Pair<Integer, Integer> aresta){
+        for (int i = 0; i < g.getArestas().size(); i++) {
+            if(g.getArestas().get(i) == aresta){
+                g.getArestas().remove(i);
+            }
+        }
+    }
+    
+    public Vertice busca_vertice (Pair<Integer, Integer> a, Vertice v1, Grafo g) {
+        int v2 = 0;
+        if(a.getKey() == v1.getIndice()){
+            v2 = a.getValue();
+        }else{
+            v2 = a.getKey();
+        }
+        for (int i = 0; i < g.getVertices().size(); i++) {
+            if(g.getVertices().get(i).getIndice() == v2){
+                System.out.println(g.getVertices().get(i).getIndice());
+                return g.getVertices().get(i);
+            }
+        }
+        return null;
+    }
+    
+    public  ArrayList<Vertice> Fleury() {
+        
+        Grafo g = grafo;
+        ArrayList<Vertice> vertices = g.getVertices();
+        ArrayList<Pair<Integer, Integer>> caminho = new ArrayList<Pair<Integer, Integer>>();
+        ArrayList<Vertice> c = new ArrayList<Vertice>();
+        //pega o primeiro vertice do grafo e coloca em c
+        Vertice v = vertices.get(0);
+        c.add(v);
+        while (!g.getArestas().isEmpty()){
+            //chama de v1 o ultimo elemento adicionado em c
+            Vertice v1 = c.get(c.size()-1);
+            Pair<Integer, Integer> a = new Pair(null, null);
+            //busca a aresta que contenha v1
+            if (v1.getGrau() == 1) {
+                a = busca_aresta(v1, g.getArestas()); 
+            }else {
+                a = busca_aresta_nao_ponte(g, v1, g.getArestas());
+                if(a == null) a = busca_aresta(v1, g.getArestas());
+            }
+            removeAresta(g, a);
+            caminho.add(a);
+            Vertice v2 = busca_vertice(a, v1, g);
+            c.add(v2);
+        }
+        
+        for (int i = 0; i < c.size(); i++) {
+            
+            if(i == 0) System.out.print("Circuito Euleriano(por fleury): [ ");
+            
+            System.out.print("v"+(c.get(i).getIndice()+1));
+            
+            if( ( i >= 0 ) && ( i < ( grafo.getVertices().size() - 1 ) )){
+                System.out.print(", ");
+            }
+            
+            if(i == grafo.getVertices().size()-1) System.out.println(" ]");
+        }
+        return c;
+    }
+
+    /*
+    Algoritmo de Fleury para a busca do Ciclo Euleriano
+        em um grafo:
+        caminho Fleury(grafo G = (V,A)) {
+        v0 = v´ertice em V
+        C = [v0]
+        Enquanto existir aresta em A
+        vi = ´ultimo v´ertice inserido em C
+        Se vi possui apenas uma aresta incidente;
+        ai = a aresta incidente a vi em G
+        Sen˜ao
+        ai = aresta de vi em G n˜ao ponte
+        Apagar ai de A em G
+        Inserir ai no final de C
+        vj = v´ertice destino de ai
+        Inserir vj na posi¸c˜ao final de C
+        Retornar C
+        }
+    */
+    
     /**
      * Verifica se o grafo é euleriano e, em um caso positivo, 
      * exibe um circuito eureliano do grafo.
@@ -347,7 +459,7 @@ public class ManipulaGrafo {
             
             if(i == 0) System.out.print("Circuito Euleriano: [ ");
             
-            System.out.print("v"+visitados.get(i).getIndice());
+            System.out.print("v"+(visitados.get(i).getIndice()+1));
             
             if( ( i >= 0 ) && ( i < ( grafo.getVertices().size() - 1 ) )){
                 System.out.print(", ");
