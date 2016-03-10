@@ -131,7 +131,7 @@ public class ManipulaGrafo {
                 compConexos++;
                 if((compConexos > 1 ) && (conexo == true)) 
                     conexo = false;
-                System.out.println("\n\n BUSCA EM PROFUNDIDADE "+String.valueOf(compConexos)+":");
+//                System.out.println("\n\n BUSCA EM PROFUNDIDADE "+String.valueOf(compConexos)+":");
                 buscaProfundidade(i, arestaVisitada);
             }
         }
@@ -154,7 +154,7 @@ public class ManipulaGrafo {
         v.setPE(tempo);
         v.setBack(v.getPE());
         
-        /* Imprime dados do vértice a ser explorado */
+        /* Imprime dados do vértice a ser explorado 
         String str = "Explorando v"+String.valueOf(_indiceRaiz+1)+"."+
                 " PE(v"+String.valueOf((_indiceRaiz+1))+"): "+String.valueOf(v.getPE())+
                 ", PS(v"+String.valueOf((_indiceRaiz+1))+"): "+String.valueOf(v.getPS())+
@@ -162,7 +162,7 @@ public class ManipulaGrafo {
         if(v.getPai() == -1) str+="nenhum";
         else str+=String.valueOf((v.getPai()+1));
         System.out.println(str);
-        
+        */
         /* 
            Testaremos para cada aresta do grafo se não foi visitada e 
            se é uma aresta que pertence ao vértice que está sendo explorado. 
@@ -200,9 +200,10 @@ public class ManipulaGrafo {
                         w.setPai(_indiceRaiz);
                         w.setCor(1 - v.getCor() );
 
-                        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
-                        System.out.println("Inserindo aresta de profundidade (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
-                        /* Guardando arestas numa lista generica representando um bloco,
+//                        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
+//                        System.out.println("Inserindo aresta de profundidade (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
+
+                    /* Guardando arestas numa lista generica representando um bloco,
                         * a medida que o algoritmo rodar, os blocos vao sendo definidos, 
                         * e as arestas removidas desta lista inicial */
                         Pair<Integer,Integer> copy_aresta = new Pair(a, b);
@@ -240,7 +241,7 @@ public class ManipulaGrafo {
                             /* Se os 2 vértices ligados por uma aresta de retorno tiverem a mesma cor, o grafo não é bipartido */
                             if ((w.getCor() == v.getCor()) && (bipartido)) bipartido = false;
                             
-                            System.out.println("Inserindo aresta de retorno (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
+//                            System.out.println("Inserindo aresta de retorno (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
                             _arestaVisitada[indiceAresta] = true;
                             Pair<Integer,Integer> copy_aresta = new Pair(a, b);
                             _bloco.addAresta(copy_aresta);
@@ -273,8 +274,8 @@ public class ManipulaGrafo {
         tempo++;
         v.setPS(tempo);
         
-        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
-        System.out.println("PS(v"+String.valueOf(_indiceRaiz+1)+"): "+String.valueOf(v.getPS()) );
+//        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
+//        System.out.println("PS(v"+String.valueOf(_indiceRaiz+1)+"): "+String.valueOf(v.getPS()) );
     }
     
     /**
@@ -289,20 +290,21 @@ public class ManipulaGrafo {
                     //Se o bloco tiver apenas uma aresta, ele é considerado uma ponte
                     if(grafo.getBlocos().get(j).getArestas().size() == 1){
                         grafo.addPonte(aresta);
-                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
+//                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
                     }
                     else {
-                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
+//                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
                     }
                 }
                      
-                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
+/*                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
 
                 if( ( i >= 0 ) && ( i < ( grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
                     System.out.print(", ");
                 }
 
                 if(i == grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
+*/                
             }
         }
     }
@@ -343,19 +345,30 @@ public class ManipulaGrafo {
     }
     
     public Vertice busca_vertice (Pair<Integer, Integer> a, Vertice v1, Grafo g) {
+        
         int v2 = 0;
+        
         if(a.getKey() == v1.getIndice()){
             v2 = a.getValue();
         }else{
             v2 = a.getKey();
         }
+        
+        /**
+         * Não entendi! Pq vc percorreu a lista de vértices se v2 já é o índice?
+         * BEATRIZ
+         * 
+         
         for (int i = 0; i < g.getVertices().size(); i++) {
             if(g.getVertices().get(i).getIndice() == v2){
                 System.out.println(g.getVertices().get(i).getIndice());
                 return g.getVertices().get(i);
             }
         }
-        return null;
+        */
+        System.out.print(String.valueOf(v2));
+        return g.getVertices().get(v2);
+        
     }
     
     public  ArrayList<Vertice> Fleury() {
@@ -367,6 +380,7 @@ public class ManipulaGrafo {
         //pega o primeiro vertice do grafo e coloca em c
         Vertice v = vertices.get(0);
         c.add(v);
+                
         while (!g.getArestas().isEmpty()){
             //chama de v1 o ultimo elemento adicionado em c
             Vertice v1 = c.get(c.size()-1);
@@ -378,11 +392,19 @@ public class ManipulaGrafo {
                 a = busca_aresta_nao_ponte(g, v1, g.getArestas());
                 if(a == null) a = busca_aresta(v1, g.getArestas());
             }
+            
+            
+            /**
+             * Está entrando em busca_vertice com aresta nula para o exemplo com 5 vértices e 100%. 
+             * Está repetindo vértice no caminho. Isso deveria acontecer?
+             */
             removeAresta(g, a);
             caminho.add(a);
             Vertice v2 = busca_vertice(a, v1, g);
             c.add(v2);
+            
         }
+        
         
         for (int i = 0; i < c.size(); i++) {
             

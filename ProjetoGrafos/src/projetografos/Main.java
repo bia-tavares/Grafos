@@ -42,12 +42,12 @@ public class Main {
         
         if (manipulador != null){
             
-            manipulador.imprimeGrafo();
-            System.out.println("\n\n\n");
+//            manipulador.imprimeGrafo();
+//            System.out.println("\n\n\n");
             
             manipulador.busca();
             
-            if(manipulador.ehConexo()) System.out.println("\n\n O GRAFO É CONEXO!!");
+/*            if(manipulador.ehConexo()) System.out.println("\n\n O GRAFO É CONEXO!!");
             else System.out.println("\n\n O GRAFO NÃO É CONEXO!!");
             
             System.out.println(" O NÚMERO DE COMPONENTES CONEXAS DO GRAFO É: " + String.valueOf(manipulador.numeroCompConexos()));
@@ -60,13 +60,14 @@ public class Main {
             
             if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n É UMA ÁRVORE!!");
             else System.out.println("\n NÃO É UMA ÁRVORE!!");
-            
+*/            
             if(manipulador.ehEuleriano()) System.out.println("\n O GRAFO É UM CIRCUITO EULERIANO");
             else System.out.println("\n NÃO É UM CIRCUITO EULERIANO");
-            
+/*            
             System.out.println("\n\n");
             manipulador.imprimeGrafo();
             manipulador.imprimeTabelaGrafo();
+*/
             manipulador.buscaPontesArticBlocos();
             
             if(manipulador.ehEuleriano()){
