@@ -354,9 +354,8 @@ public class ManipulaGrafo {
             v2 = a.getKey();
         }
         
-        /**
+        /**DUVIDA
          * Não entendi! Pq vc percorreu a lista de vértices se v2 já é o índice?
-         * BEATRIZ
          * 
          
         for (int i = 0; i < g.getVertices().size(); i++) {
@@ -394,7 +393,7 @@ public class ManipulaGrafo {
             }
             
             
-            /**
+            /**DUVIDA
              * Está entrando em busca_vertice com aresta nula para o exemplo com 5 vértices e 100%. 
              * Está repetindo vértice no caminho. Isso deveria acontecer?
              */
