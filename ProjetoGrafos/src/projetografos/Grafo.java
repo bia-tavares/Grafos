@@ -23,6 +23,8 @@ public class Grafo{
     private double probabilidade;
     private ArrayList<Bloco> blocos = new ArrayList<Bloco>();
     private ArrayList<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
+    private int tempo, compConexos;
+    private boolean conexo;
 
     /**
      * Construtor da classe.
@@ -31,6 +33,9 @@ public class Grafo{
      * @param _nVertices - número de vértices do grafo.
      */
     public Grafo(){
+        this.tempo = 0;
+        this.compConexos = 1;
+        this.conexo = true;
     }
     
     /**
@@ -97,6 +102,24 @@ public class Grafo{
     public ArrayList<Pair<Integer, Integer>> getPontes(){
         return pontes;
     }
-
     
+    public int getCompConexos(){
+        return this.compConexos;
+    }
+    public void addCompConexos(){
+        this.compConexos++;
+    }
+    
+    public int getTempo(){
+        return this.tempo;
+    }
+    public void addTempo(){
+        this.tempo++;
+    }
+    public void setConexo(boolean r){
+        this.conexo = r;
+    }
+    public boolean getConexo(){
+        return this.conexo;
+    }
 }

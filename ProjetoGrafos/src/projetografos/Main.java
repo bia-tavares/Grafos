@@ -45,7 +45,7 @@ public class Main {
 //            manipulador.imprimeGrafo();
 //            System.out.println("\n\n\n");
             
-            manipulador.busca();
+            manipulador.busca(grafo);
             
 /*            if(manipulador.ehConexo()) System.out.println("\n\n O GRAFO É CONEXO!!");
             else System.out.println("\n\n O GRAFO NÃO É CONEXO!!");
@@ -61,16 +61,16 @@ public class Main {
             if(manipulador.ehConexo() && !manipulador.ehCiclico()) System.out.println("\n É UMA ÁRVORE!!");
             else System.out.println("\n NÃO É UMA ÁRVORE!!");
 */            
-            if(manipulador.ehEuleriano()) System.out.println("\n O GRAFO É UM CIRCUITO EULERIANO");
+            if(manipulador.ehEuleriano(grafo)) System.out.println("\n O GRAFO É UM CIRCUITO EULERIANO");
             else System.out.println("\n NÃO É UM CIRCUITO EULERIANO");
 /*            
             System.out.println("\n\n");
-            manipulador.imprimeGrafo();
-            manipulador.imprimeTabelaGrafo();
-*/
+            manipulador.imprimeGrafo();*/
+            manipulador.imprimeTabelaGrafo(grafo);
+
             manipulador.buscaPontesArticBlocos();
             
-            if(manipulador.ehEuleriano()){
+            if(manipulador.ehEuleriano(grafo)){
                 manipulador.montaGrafoEuleriano();
                 manipulador.Fleury();
             }

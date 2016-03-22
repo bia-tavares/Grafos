@@ -20,8 +20,7 @@ import javafx.util.Pair;
 public class ManipulaGrafo {
     
     private Grafo grafo;
-    private int tempo, compConexos;
-    private boolean conexo = true, ciclico = false, bipartido = true, euleriano = false;
+    private boolean ciclico = false, bipartido = true, euleriano = false;
     private List<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
     private Bloco _bloco = new Bloco(0);
     private int indice_bloco = 0;
@@ -71,29 +70,29 @@ public class ManipulaGrafo {
     /**
      * Método que imprime as listas de vértices e arestas
      */
-    public void imprimeTabelaGrafo(){
-        for (int i = 0; i < grafo.getVertices().size(); i++) {
+    public void imprimeTabelaGrafo(Grafo _grafo){
+        for (int i = 0; i < _grafo.getVertices().size(); i++) {
             if(i == 0) System.out.print("\n\nVert : ");
             System.out.print(" v"+String.valueOf(i+1));
         }
-        for (int i = 0; i < grafo.getVertices().size(); i++) {
+        for (int i = 0; i < _grafo.getVertices().size(); i++) {
             if(i == 0) System.out.print("\n  PE : ");
-            Vertice v = grafo.getVertices().get(i);
+            Vertice v = _grafo.getVertices().get(i);
             System.out.print("  "+(v.getPE()));
         }
-        for (int i = 0; i < grafo.getVertices().size(); i++) {
+        for (int i = 0; i < _grafo.getVertices().size(); i++) {
             if(i == 0) System.out.print("\n  PS : ");
-            Vertice v = grafo.getVertices().get(i);
+            Vertice v = _grafo.getVertices().get(i);
             System.out.print("  "+(v.getPS()));
         }
-        for (int i = 0; i < grafo.getVertices().size(); i++) {
+        for (int i = 0; i < _grafo.getVertices().size(); i++) {
             if(i == 0) System.out.print("\nBack : ");
-            Vertice v = grafo.getVertices().get(i);
+            Vertice v = _grafo.getVertices().get(i);
             System.out.print("  "+(v.getBack()));
         }
-        for (int i = 0; i < grafo.getVertices().size(); i++) {
+        for (int i = 0; i < _grafo.getVertices().size(); i++) {
             if(i == 0) System.out.print("\nGrau : ");
-            Vertice v = grafo.getVertices().get(i);
+            Vertice v = _grafo.getVertices().get(i);
             System.out.print("  "+(v.getGrau()));
         }
         System.out.println("\n");
@@ -107,32 +106,30 @@ public class ManipulaGrafo {
         testa se todos os vértices foram visitados e
         faz novas buscas, caso seja necessário.
      */
-    public void busca(){
-        
-        tempo = 0;
+    public void busca(Grafo _grafo){
         
         // Guarda se a aresta já foi visitada
-        boolean[] arestaVisitada = new boolean[grafo.getArestas().size()];
+        boolean[] arestaVisitada = new boolean[_grafo.getArestas().size()];
         
         /* compConexos é o número de grafos desconexos encontrados.
            A raíz é escolhida aleatoriamente na primeira busca, baseado no numero de vertices.
         */
-        compConexos = 1;
-        int raiz = (int)(Math.random()*grafo.getNumeroVertices());
-        buscaProfundidade(raiz, arestaVisitada);
+        
+        int raiz = (int)(Math.random()*_grafo.getNumeroVertices());
+        buscaProfundidade(_grafo, raiz, arestaVisitada);
 
         /* Se o grafo for desconexo, ao sair da primeira busca existirão vértices não explorados. 
             Então devemos percorrer a lista de vértices em busca de um vértice não explorado,
             e fazer uma nova busca usando ele como v.
         */
-        for(int i = 0; i < grafo.getVertices().size(); i++){
+        for(int i = 0; i < _grafo.getVertices().size(); i++){
             
-            if ( grafo.getVertices().get(i).getPE() == 0 ) {
-                compConexos++;
-                if((compConexos > 1 ) && (conexo == true)) 
-                    conexo = false;
+            if ( _grafo.getVertices().get(i).getPE() == 0 ) {
+                _grafo.addCompConexos();
+                if((_grafo.getCompConexos() > 1 ) && (_grafo.getConexo() == true)) 
+                    _grafo.setConexo(false);
 //                System.out.println("\n\n BUSCA EM PROFUNDIDADE "+String.valueOf(compConexos)+":");
-                buscaProfundidade(i, arestaVisitada);
+                buscaProfundidade(_grafo, i, arestaVisitada);
             }
         }
         
@@ -146,12 +143,12 @@ public class ManipulaGrafo {
      * @param _arestaVisitada - Lista booleana que indica se determinada aresta já foi visitada.
      * 
      */
-    private void buscaProfundidade(int _indiceRaiz, boolean[] _arestaVisitada){
+    private void buscaProfundidade(Grafo _grafo, int _indiceRaiz, boolean[] _arestaVisitada){
                
-        Vertice v = grafo.getVertices().get(_indiceRaiz);
+        Vertice v = _grafo.getVertices().get(_indiceRaiz);
         /* Para cada novo vértice inserido, incrementa o tempo */
-        tempo++;
-        v.setPE(tempo);
+        _grafo.addTempo();
+        v.setPE(_grafo.getTempo());
         v.setBack(v.getPE());
         
         /* Imprime dados do vértice a ser explorado 
@@ -167,12 +164,12 @@ public class ManipulaGrafo {
            Testaremos para cada aresta do grafo se não foi visitada e 
            se é uma aresta que pertence ao vértice que está sendo explorado. 
         */
-        for (int indiceAresta = 0; indiceAresta < grafo.getArestas().size(); indiceAresta++) {
+        for (int indiceAresta = 0; indiceAresta < _grafo.getArestas().size(); indiceAresta++) {
             
             if(!_arestaVisitada[indiceAresta]){
                 
                 /* A aresta relaciona a com b da seguinte maneira: (a, b) */
-                Pair<Integer,Integer> aresta = grafo.getArestas().get(indiceAresta);
+                Pair<Integer,Integer> aresta = _grafo.getArestas().get(indiceAresta);
                 int a = aresta.getKey();
                 int b = aresta.getValue();
                 Vertice w = new Vertice();
@@ -186,8 +183,8 @@ public class ManipulaGrafo {
                 if ((a == v.getIndice()) || (b == v.getIndice())){
 
                     /* Colocando em w o vértice a qual v está conectado através da aresta analisada: (v,w) ou (w,v)*/
-                    if(a == v.getIndice()) w = grafo.getVertices().get(b);
-                    if(b == v.getIndice()) w = grafo.getVertices().get(a);
+                    if(a == v.getIndice()) w = _grafo.getVertices().get(b);
+                    if(b == v.getIndice()) w = _grafo.getVertices().get(a);
                     
 
                     /* Se o vértice w tiver PE == 0, significa que ainda não foi visitado.
@@ -209,7 +206,7 @@ public class ManipulaGrafo {
                         Pair<Integer,Integer> copy_aresta = new Pair(a, b);
                         _bloco.addAresta(copy_aresta);
 
-                        buscaProfundidade(w.getIndice(), _arestaVisitada);
+                        buscaProfundidade(_grafo, w.getIndice(), _arestaVisitada);
                         /*O back ser maior ou igual à PE representa que o grafo deixou de seguir neste bloco e iniciou outro*/
                         if (w.getBack() >= v.getPE()) {
                             Bloco bl = new Bloco(indice_bloco++);
@@ -222,7 +219,7 @@ public class ManipulaGrafo {
                             };
 
                             bl.addAresta(_bloco.removeAresta());
-                            grafo.addBloco(bl, indice_bloco);
+                            _grafo.addBloco(bl, indice_bloco);
                         }
                         v.setBack(Math.min(v.getBack(), w.getBack()));
                     }
@@ -271,8 +268,8 @@ public class ManipulaGrafo {
             }           
         }
         
-        tempo++;
-        v.setPS(tempo);
+        _grafo.addTempo();
+        v.setPS(_grafo.getTempo());
         
 //        System.out.println("\n t = "+String.valueOf(tempo)+" : ");
 //        System.out.println("PS(v"+String.valueOf(_indiceRaiz+1)+"): "+String.valueOf(v.getPS()) );
@@ -290,21 +287,21 @@ public class ManipulaGrafo {
                     //Se o bloco tiver apenas uma aresta, ele é considerado uma ponte
                     if(grafo.getBlocos().get(j).getArestas().size() == 1){
                         grafo.addPonte(aresta);
-//                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
+                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
                     }
                     else {
-//                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
+                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
                     }
                 }
                      
-/*                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
+                System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
 
                 if( ( i >= 0 ) && ( i < ( grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
                     System.out.print(", ");
                 }
 
                 if(i == grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
-*/                
+                
             }
         }
     }
@@ -319,6 +316,7 @@ public class ManipulaGrafo {
     }
     public boolean ePonte(Grafo g, Pair<Integer, Integer> aresta){
         for (int i = 0; i < g.getBlocos().size(); i++) {
+            //Caso o bloco tenha apenas uma aresa e essa seja a aresta passada, ela é uma ponte
             if(g.getBlocos().get(i).getArestas().size() == 1  && g.getBlocos().get(i).getArestas().get(0) == aresta){
                 return true;
             }
@@ -353,21 +351,8 @@ public class ManipulaGrafo {
         }else{
             v2 = a.getKey();
         }
-        
-        /**DUVIDA
-         * Não entendi! Pq vc percorreu a lista de vértices se v2 já é o índice?
-         * 
-         
-        for (int i = 0; i < g.getVertices().size(); i++) {
-            if(g.getVertices().get(i).getIndice() == v2){
-                System.out.println(g.getVertices().get(i).getIndice());
-                return g.getVertices().get(i);
-            }
-        }
-        */
-        System.out.print(String.valueOf(v2));
+        System.out.print(">>>"+String.valueOf(v2));
         return g.getVertices().get(v2);
-        
     }
     
     public  ArrayList<Vertice> Fleury() {
@@ -398,6 +383,7 @@ public class ManipulaGrafo {
              * Está repetindo vértice no caminho. Isso deveria acontecer?
              */
             removeAresta(g, a);
+            //CHAMAR BUSCA EM PROFUNDIDADE DE NOVO
             caminho.add(a);
             Vertice v2 = busca_vertice(a, v1, g);
             c.add(v2);
@@ -449,13 +435,13 @@ public class ManipulaGrafo {
      * 
      * @return se grafo é ou não euleriano.
      */
-    public boolean ehEuleriano(){
+    public boolean ehEuleriano(Grafo _grafo){
         // Grafos eulerianos, precisam necessariamente ser conexos
-        if(this.ehConexo() && this.compConexos==1) {
+        if(this.ehConexo(_grafo) && _grafo.getCompConexos()==1) {
             euleriano = true;
-            for (int i = 0; i < grafo.getVertices().size(); i++) {
+            for (int i = 0; i < _grafo.getVertices().size(); i++) {
                 // E todos seus elementos precisam ter grau par                
-                if((grafo.getVertices().get(i).getGrau())%2 == 1) {
+                if((_grafo.getVertices().get(i).getGrau())%2 == 1) {
                     euleriano = false;
                 }
             }
@@ -533,8 +519,8 @@ public class ManipulaGrafo {
      *
      * @return true se for desconexo.
      */
-    public boolean ehConexo(){
-        return conexo;
+    public boolean ehConexo(Grafo _g){
+        return _g.getConexo();
     }
     
     /**
@@ -542,9 +528,9 @@ public class ManipulaGrafo {
      * 
      * @return quantidade de componentes conexos
      */
-    public int numeroCompConexos(){
-        return compConexos;
-    }
+//    public int numeroCompConexos(){
+//        return _grafo.compConexos;
+//    }
     
     
     /**
