@@ -22,8 +22,7 @@ public class ManipulaGrafo {
     private Grafo grafo;
     private boolean ciclico = false, bipartido = true, euleriano = false;
     private List<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
-    private Bloco _bloco = new Bloco(0);
-    private int indice_bloco = 0;
+    
     
     /**
      * Construtor da classe.
@@ -204,22 +203,23 @@ public class ManipulaGrafo {
                         * a medida que o algoritmo rodar, os blocos vao sendo definidos, 
                         * e as arestas removidas desta lista inicial */
                         Pair<Integer,Integer> copy_aresta = new Pair(a, b);
-                        _bloco.addAresta(copy_aresta);
-
+                        _grafo.set_bloco(copy_aresta);
                         buscaProfundidade(_grafo, w.getIndice(), _arestaVisitada);
                         /*O back ser maior ou igual à PE representa que o grafo deixou de seguir neste bloco e iniciou outro*/
                         if (w.getBack() >= v.getPE()) {
-                            Bloco bl = new Bloco(indice_bloco++);
+                            Bloco bl = new Bloco();
+                            bl.setID(_grafo.addIndiceBloco());
                             /*Entao varremos na lista todas as ultimas arestas inseridas, até chegar na que atendedeu à condiçao acima*/
-                            while(_bloco.ultimaAresta().equals(copy_aresta) == false){
-                                if(_bloco != null) {
-                                    Pair<Integer, Integer> aa = _bloco.removeAresta(); 
+                            while(_grafo.get_bloco().ultimaAresta().equals(copy_aresta) == false){
+                                if(_grafo.get_bloco() != null) {
+                                    Pair<Integer, Integer> aa = _grafo.get_bloco().removeAresta(); 
                                     bl.addAresta(aa);
+                                    
                                 }
                             };
 
-                            bl.addAresta(_bloco.removeAresta());
-                            _grafo.addBloco(bl, indice_bloco);
+                            bl.addAresta(_grafo.get_bloco().removeAresta());
+                            _grafo.addBloco(bl, _grafo.getIndiceBloco());
                         }
                         v.setBack(Math.min(v.getBack(), w.getBack()));
                     }
@@ -241,7 +241,7 @@ public class ManipulaGrafo {
 //                            System.out.println("Inserindo aresta de retorno (v"+String.valueOf((_indiceRaiz+1))+",v"+String.valueOf((w.getIndice()+1))+")");
                             _arestaVisitada[indiceAresta] = true;
                             Pair<Integer,Integer> copy_aresta = new Pair(a, b);
-                            _bloco.addAresta(copy_aresta);
+                            _grafo.set_bloco(copy_aresta);
 
                             v.setBack(Math.min(v.getBack(), w.getPE()));
                         }
@@ -278,29 +278,29 @@ public class ManipulaGrafo {
     /**
      * Método que imprime as pontes, articulações e blocos do grafo.
      */
-    public void buscaPontesArticBlocos(){
+    public void buscaPontesArticBlocos(Grafo _grafo){
         
-        for (int j = 0; j < grafo.getBlocos().size(); j++) {
+        for (int j = 0; j < _grafo.getBlocos().size(); j++) {
             for (int i = 0; i < grafo.getBlocos().get(j).getArestas().size(); i++) {
-                Pair<Integer, Integer> aresta = grafo.getBlocos().get(j).getArestas().get(i);
+                Pair<Integer, Integer> aresta = _grafo.getBlocos().get(j).getArestas().get(i);
                 if(i == 0) {
                     //Se o bloco tiver apenas uma aresta, ele é considerado uma ponte
-                    if(grafo.getBlocos().get(j).getArestas().size() == 1){
-                        grafo.addPonte(aresta);
-                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
+                    if(_grafo.getBlocos().get(j).getArestas().size() == 1){
+                        _grafo.addPonte(aresta);
+                        System.out.print("Bloco "+_grafo.getBlocos().get(j).getID()+"(PONTE): [ ");
                     }
                     else {
-                        System.out.print("Bloco "+grafo.getBlocos().get(j).getID()+": [ ");
+                        System.out.print("Bloco "+_grafo.getBlocos().get(j).getID()+": [ ");
                     }
                 }
                      
                 System.out.print("( v"+String.valueOf(aresta.getKey()+1)+ ", v"+String.valueOf(aresta.getValue()+1)+" )");
 
-                if( ( i >= 0 ) && ( i < ( grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
+                if( ( i >= 0 ) && ( i < ( _grafo.getBlocos().get(j).getArestas().size() - 1 ) )){
                     System.out.print(", ");
                 }
 
-                if(i == grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
+                if(i == _grafo.getBlocos().get(j).getArestas().size()-1) System.out.println(" ]");
                 
             }
         }

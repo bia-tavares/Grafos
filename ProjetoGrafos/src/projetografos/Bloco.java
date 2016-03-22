@@ -17,8 +17,8 @@ public class Bloco {
     private int id;
     private ArrayList<Pair<Integer, Integer>> arestas;
      
-    public Bloco(int _id) {
-        this.id = _id;
+    public Bloco() {
+        this.id = 0;
         arestas = new ArrayList<Pair<Integer, Integer>>();
     }
     public void setID(int _i) {
@@ -44,5 +44,6 @@ public class Bloco {
     public  Pair<Integer, Integer> removeAresta() {
         return this.arestas.remove(arestas.size()-1);
     }
+
 }
 

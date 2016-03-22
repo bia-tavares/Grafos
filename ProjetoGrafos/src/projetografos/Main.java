@@ -68,7 +68,7 @@ public class Main {
             manipulador.imprimeGrafo();*/
             manipulador.imprimeTabelaGrafo(grafo);
 
-            manipulador.buscaPontesArticBlocos();
+            manipulador.buscaPontesArticBlocos(grafo);
             
             if(manipulador.ehEuleriano(grafo)){
                 manipulador.montaGrafoEuleriano();

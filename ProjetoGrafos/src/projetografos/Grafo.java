@@ -25,6 +25,8 @@ public class Grafo{
     private ArrayList<Pair<Integer, Integer>> pontes = new ArrayList<Pair<Integer, Integer>>();
     private int tempo, compConexos;
     private boolean conexo;
+    private Bloco _bloco;
+    private int indice_bloco;
 
     /**
      * Construtor da classe.
@@ -36,7 +38,11 @@ public class Grafo{
         this.tempo = 0;
         this.compConexos = 1;
         this.conexo = true;
-    }
+        this.indice_bloco = 0;
+        Bloco b = new Bloco();
+        this.blocos.add(0,b);
+        this._bloco = b;
+    } 
     
     /**
      * Constrói grafo com parâmetros passados.
@@ -65,8 +71,6 @@ public class Grafo{
                 
             }
         }
-        Bloco b = new Bloco(0);
-        blocos.add(0,b); 
     }
     
     public ArrayList<Vertice> getVertices(){
@@ -121,5 +125,18 @@ public class Grafo{
     }
     public boolean getConexo(){
         return this.conexo;
+    }
+    public Pair<Integer, Integer> set_bloco(Pair<Integer, Integer> aresta){
+        this._bloco.addAresta(aresta);
+        return aresta;
+    }
+    public int addIndiceBloco() {
+        return this.indice_bloco++;
+    }
+    public int getIndiceBloco() {
+        return this.indice_bloco;
+    }
+    public Bloco get_bloco(){
+        return this._bloco;
     }
 }
