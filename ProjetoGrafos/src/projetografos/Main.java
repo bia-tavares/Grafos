@@ -71,8 +71,8 @@ public class Main {
             manipulador.buscaPontesArticBlocos(grafo);
             
             if(manipulador.ehEuleriano(grafo)){
-                manipulador.montaGrafoEuleriano();
-                manipulador.Fleury();
+                manipulador.montaGrafoEuleriano(grafo);
+                manipulador.Fleury(grafo);
             }
             
             // Depois de montar o grafo, buscar as pontes, articulações e blocos.

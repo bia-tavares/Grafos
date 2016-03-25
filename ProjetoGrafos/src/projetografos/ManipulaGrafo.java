@@ -355,9 +355,9 @@ public class ManipulaGrafo {
         return g.getVertices().get(v2);
     }
     
-    public  ArrayList<Vertice> Fleury() {
+    public  ArrayList<Vertice> Fleury(Grafo _grafo) {
         
-        Grafo g = grafo;
+        Grafo g = _grafo;
         ArrayList<Vertice> vertices = g.getVertices();
         ArrayList<Pair<Integer, Integer>> caminho = new ArrayList<Pair<Integer, Integer>>();
         ArrayList<Vertice> c = new ArrayList<Vertice>();
@@ -371,7 +371,7 @@ public class ManipulaGrafo {
             Pair<Integer, Integer> a = new Pair(null, null);
             //busca a aresta que contenha v1
             if (v1.getGrau() == 1) {
-                a = busca_aresta(v1, g.getArestas()); 
+                a = busca_aresta_nao_ponte(g ,v1, g.getArestas()); 
             }else {
                 a = busca_aresta_nao_ponte(g, v1, g.getArestas());
                 if(a == null) a = busca_aresta(v1, g.getArestas());
@@ -382,12 +382,18 @@ public class ManipulaGrafo {
              * Está entrando em busca_vertice com aresta nula para o exemplo com 5 vértices e 100%. 
              * Está repetindo vértice no caminho. Isso deveria acontecer?
              */
-            removeAresta(g, a);
-            //CHAMAR BUSCA EM PROFUNDIDADE DE NOVO
+            g.removeAresta(a);
             caminho.add(a);
             Vertice v2 = busca_vertice(a, v1, g);
             c.add(v2);
             
+            boolean[] arestaVisitada = new boolean[g.getArestas().size()];
+            //g.limpaBlocos();
+            
+            buscaProfundidade(g, 0, arestaVisitada);
+            imprimeTabelaGrafo(g);
+     
+            buscaPontesArticBlocos(g);
         }
         
         
@@ -454,13 +460,13 @@ public class ManipulaGrafo {
     /**
      *  Monta um circuito euleriano partindo de um vértice aleatório.
      */
-    public void montaGrafoEuleriano(){
+    public void montaGrafoEuleriano(Grafo _grafo){
         
         ArrayList<Vertice> visitados = new ArrayList<Vertice>();
             
-        int indice = (int)(Math.random()*grafo.getNumeroVertices());
+        int indice = (int)(Math.random()*_grafo.getNumeroVertices());
                 
-        buscaEuleriano(indice, visitados);
+        buscaEuleriano(_grafo, indice, visitados);
             
         for (int i = 0; i < visitados.size(); i++) {
             
@@ -468,27 +474,27 @@ public class ManipulaGrafo {
             
             System.out.print("v"+(visitados.get(i).getIndice()+1));
             
-            if( ( i >= 0 ) && ( i < ( grafo.getVertices().size() - 1 ) )){
+            if( ( i >= 0 ) && ( i < ( _grafo.getVertices().size() - 1 ) )){
                 System.out.print(", ");
             }
             
-            if(i == grafo.getVertices().size()-1) System.out.println(" ]");
+            if(i == _grafo.getVertices().size()-1) System.out.println(" ]");
         }
         
 
    }
     
-    private void buscaEuleriano(int _indice, ArrayList<Vertice> _visitado){
+    private void buscaEuleriano(Grafo _grafo, int _indice, ArrayList<Vertice> _visitado){
 
-        Vertice v = grafo.getVertices().get(_indice);
+        Vertice v = _grafo.getVertices().get(_indice);
         _visitado.add(v);
         
         
         /* Testaremos para cada aresta do grafo se é uma aresta que pertence ao vértice que está sendo explorado. */
-        for (int i = 0; i < grafo.getArestas().size(); i++) {
+        for (int i = 0; i < _grafo.getArestas().size(); i++) {
             
             /* A aresta relaciona a com b da seguinte maneira: (a, b) */
-            Pair<Integer,Integer> aresta = grafo.getArestas().get(i);
+            Pair<Integer,Integer> aresta = _grafo.getArestas().get(i);
             int a = aresta.getKey();
             int b = aresta.getValue();
             Vertice w = new Vertice();
@@ -500,11 +506,11 @@ public class ManipulaGrafo {
             if ((a == v.getIndice()) || (b == v.getIndice())){
                 
                 /* Colocando em w o vértice a qual v está conectado através da aresta analisada*/
-                if(a == v.getIndice()) w = grafo.getVertices().get(b);
-                if(b == v.getIndice()) w = grafo.getVertices().get(a);
+                if(a == v.getIndice()) w = _grafo.getVertices().get(b);
+                if(b == v.getIndice()) w = _grafo.getVertices().get(a);
                 
                 if(!_visitado.contains(w))
-                    buscaEuleriano(w.getIndice(), _visitado);
+                    buscaEuleriano(_grafo, w.getIndice(), _visitado);
             }
         }
         

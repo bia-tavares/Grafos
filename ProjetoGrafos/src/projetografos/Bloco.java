@@ -14,11 +14,13 @@ import javafx.util.Pair;
  */
 public class Bloco {
     
-    private int id;
+    private int id, tamanho;
     private ArrayList<Pair<Integer, Integer>> arestas;
+    
      
     public Bloco() {
         this.id = 0;
+        this.tamanho = 0;
         arestas = new ArrayList<Pair<Integer, Integer>>();
     }
     public void setID(int _i) {
@@ -30,6 +32,7 @@ public class Bloco {
     }
     
     public ArrayList<Pair<Integer, Integer>> getArestas() {
+        this.tamanho++;
         return this.arestas;
     }
     
@@ -43,6 +46,9 @@ public class Bloco {
     
     public  Pair<Integer, Integer> removeAresta() {
         return this.arestas.remove(arestas.size()-1);
+    }
+    public int tamanhoBloco() {
+        return this.tamanho;
     }
 
 }

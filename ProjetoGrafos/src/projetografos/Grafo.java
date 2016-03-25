@@ -81,6 +81,10 @@ public class Grafo{
         return arestas;
     }
     
+    public void removeAresta(Pair<Integer, Integer> a){
+        arestas.remove(a);
+    }
+    
     public int getNumeroVertices(){
         return nVertices;
     }
@@ -136,7 +140,25 @@ public class Grafo{
     public int getIndiceBloco() {
         return this.indice_bloco;
     }
+    
+    public void setIndiceBloco(int n) {
+        this.indice_bloco = n;
+    }
     public Bloco get_bloco(){
         return this._bloco;
     }
+    public void set_bloco(Bloco b){
+        this._bloco = b;
+    }
+    public void limpaBlocos(){
+        this.indice_bloco =0;
+        this._bloco = new Bloco();
+        for (int i = 0; i < this.blocos.size(); i++) {
+            for (int j = 0; j < this.blocos.get(i).tamanhoBloco(); j++) {
+                this.blocos.get(j).getArestas().remove(j);
+            }
+            
+        }
+    }
+    
 }
